@@ -52,14 +52,14 @@ const App = () => {
             id="todoInput"
             type="text"
             placeholder="Enter your task"
-            className="border-2 border-slate-300 text-slate-800 p-2 text-lg rounded-md m-2 w-80"
+            className="border-2 border-slate-300 text-slate-800 p-2 text-lg rounded-md m-2 w-72"
           />
           <button className="border-2 px-4 py-2 rounded-md text-white bg-orange-600 border-orange-700 hover:bg-orange-500">
             Save
           </button>
         </form>
 
-        <div className="w-[400px] ml-2 m-auto rounded-lg border-white">
+        <div className="w-[370px] ml-2 m-auto rounded-lg border-white">
           <ul>{list}</ul>
         </div>
       </div>
