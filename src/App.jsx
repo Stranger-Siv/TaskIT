@@ -1,30 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const App = () => {
+  const [todo, setTodo] = useState([]);
 
-  const [todo, setTodo] = useState([])
+  useEffect(() => {
+    const storedTodos = localStorage.getItem('todos');
+    if (storedTodos) {
+      try {
+        const parsedTodos = JSON.parse(storedTodos);
+        setTodo(parsedTodos);
+      } catch (error) {
+        console.error('Error parsing todos from localStorage:', error);
+      }
+    }
+  }, []); 
+
+  useEffect(() => {
+    if (todo.length > 0) {
+      localStorage.setItem('todos', JSON.stringify(todo));
+    }
+  }, [todo]);
 
   const saveTodo = (event) => {
     event.preventDefault();
-    const inputElement = event.target.querySelector('#todoInput').value
-    if (!todo.includes(inputElement)) {
-      const finalTodo = [...todo, inputElement]
-      setTodo(finalTodo)
-    } else {
-      alert("todo Already Exists...")
-    }
-  }
+    const inputElement = event.target.querySelector('#todoInput').value.trim();
 
-  const list = todo.map((value, index) => {
-    return(
-      <TodoListItems value={value} key={index} indexNumber={index} todo={todo} setTodo={setTodo}/>
-    )
-  })
+    if (inputElement && !todo.some(todo => todo.toLowerCase() === inputElement.toLowerCase())) {
+      const finalTodo = [...todo, inputElement];
+      setTodo(finalTodo);
+    } else {
+      alert('Todo Already Exists or Input is Empty...');
+    }
+  };
+
+  const list = todo.map((value, index) => (
+    <TodoListItems 
+      value={value} 
+      key={index} 
+      indexNumber={index} 
+      todo={todo} 
+      setTodo={setTodo} 
+    />
+  ));
 
   return (
     <div className="flex justify-center min-h-screen bg-gray-100">
       <div className="text-center">
-        <h1 className=" mt-3 text-3xl font-bold text-slate-800">TaskIT</h1>
+        <h1 className="mt-3 text-3xl font-bold text-slate-800">TaskIT</h1>
         <form className="mt-4" onSubmit={saveTodo}>
           <input
             id="todoInput"
@@ -37,10 +59,8 @@ const App = () => {
           </button>
         </form>
 
-        <div className='w-[400px] ml-2 m-auto rounded-lg border-white'>
-          <ul className=''>
-            {list}
-          </ul>
+        <div className="w-[400px] ml-2 m-auto rounded-lg border-white">
+          <ul>{list}</ul>
         </div>
       </div>
     </div>
@@ -54,7 +74,7 @@ function TodoListItems({ value, indexNumber, todo, setTodo }) {
 
   const deleteRow = () => {
     const finalData = todo.filter((_, i) => i !== indexNumber);
-    setTodo(finalData);
+    setTodo(finalData); 
   };
 
   const checkStatus = () => {
@@ -78,7 +98,7 @@ function TodoListItems({ value, indexNumber, todo, setTodo }) {
       {indexNumber + 1}. {value}
       <span
         onClick={(e) => {
-          e.stopPropagation(); // Prevent status toggle on delete
+          e.stopPropagation(); 
           deleteRow();
         }}
         className="cursor-pointer absolute right-[20px]"
@@ -88,5 +108,3 @@ function TodoListItems({ value, indexNumber, todo, setTodo }) {
     </li>
   );
 }
-
-
