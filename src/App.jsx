@@ -44,7 +44,7 @@ const App = () => {
   ));
 
   return (
-    <div className="flex justify-center min-h-screen bg-gray-100">
+    <div className="flex justify-center min-h-screen bg-gray-100 p-3 pl-10 pr-12">
       <div className="text-center">
         <h1 className="mt-3 text-3xl font-bold text-slate-800">TaskIT</h1>
         <form className="mt-4" onSubmit={saveTodo}>
